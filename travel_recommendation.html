@@ -1,1 +1,384 @@
+```html
+<script>
 
+    let travelData = null;
+
+
+    // ==========================================
+    // TASK 6 - FETCH JSON
+    // ==========================================
+
+    fetch("travel_recommendation_api.json")
+
+        .then(function(response) {
+
+            if (!response.ok) {
+                throw new Error("Could not load JSON file.");
+            }
+
+            return response.json();
+
+        })
+
+        .then(function(data) {
+
+            travelData = data;
+
+            console.log("Travel data loaded successfully:");
+            console.log(travelData);
+
+        })
+
+        .catch(function(error) {
+
+            console.error("Error loading JSON:", error);
+
+        });
+
+
+    // ==========================================
+    // GET HTML ELEMENTS
+    // ==========================================
+
+    const searchInput =
+        document.getElementById("searchInput");
+
+    const searchButton =
+        document.getElementById("searchButton");
+
+    const resetButton =
+        document.getElementById("resetButton");
+
+    const results =
+        document.getElementById("results");
+
+    const resultMessage =
+        document.getElementById("resultMessage");
+
+
+    // ==========================================
+    // TASK 7 - SEARCH
+    // ==========================================
+
+    searchButton.addEventListener("click", function() {
+
+        // Convert the user's search to lowercase
+        const keyword =
+            searchInput.value.trim().toLowerCase();
+
+
+        // BEACH / BEACHES
+        if (
+            keyword === "beach" ||
+            keyword === "beaches"
+        ) {
+
+            showBeachRecommendations();
+
+        }
+
+
+        // TEMPLE / TEMPLES
+        else if (
+            keyword === "temple" ||
+            keyword === "temples"
+        ) {
+
+            showTempleRecommendations();
+
+        }
+
+
+        // COUNTRY / COUNTRIES
+        else if (
+            keyword === "country" ||
+            keyword === "countries"
+        ) {
+
+            showCountryRecommendations();
+
+        }
+
+
+        // Invalid keyword
+        else {
+
+            results.innerHTML = "";
+
+            resultMessage.textContent =
+                "Please search for beach, temple or country.";
+
+        }
+
+    });
+
+
+    // ==========================================
+    // TASK 8 - BEACHES
+    // ==========================================
+
+    function showBeachRecommendations() {
+
+        if (!travelData) {
+
+            resultMessage.textContent =
+                "Travel data is still loading. Please try again.";
+
+            return;
+
+        }
+
+
+        results.innerHTML = "";
+
+        resultMessage.textContent =
+            "Recommended beaches:";
+
+
+        // Get beaches from JSON
+        const beaches =
+            travelData.beaches;
+
+
+        // Display the two beaches
+        beaches.forEach(function(beach) {
+
+            createRecommendationCard(
+                beach.name,
+                beach.imageUrl,
+                beach.description
+            );
+
+        });
+
+    }
+
+
+    // ==========================================
+    // TASK 8 - TEMPLES
+    // ==========================================
+
+    function showTempleRecommendations() {
+
+        if (!travelData) {
+
+            resultMessage.textContent =
+                "Travel data is still loading. Please try again.";
+
+            return;
+
+        }
+
+
+        results.innerHTML = "";
+
+        resultMessage.textContent =
+            "Recommended temples:";
+
+
+        // Get temples from JSON
+        const temples =
+            travelData.temples;
+
+
+        // Display the two temples
+        temples.forEach(function(temple) {
+
+            createRecommendationCard(
+                temple.name,
+                temple.imageUrl,
+                temple.description
+            );
+
+        });
+
+    }
+
+
+    // ==========================================
+    // TASK 8 - COUNTRIES
+    // ==========================================
+
+    function showCountryRecommendations() {
+
+        if (!travelData) {
+
+            resultMessage.textContent =
+                "Travel data is still loading. Please try again.";
+
+            return;
+
+        }
+
+
+        results.innerHTML = "";
+
+        resultMessage.textContent =
+            "Recommended countries:";
+
+
+        // Get countries from JSON
+        const countries =
+            travelData.countries;
+
+
+        /*
+         * Each country contains cities.
+         *
+         * Example:
+         *
+         * Australia
+         *    -> Sydney
+         *    -> Melbourne
+         *
+         * Japan
+         *    -> Tokyo
+         *    -> Kyoto
+         *
+         * Brazil
+         *    -> Rio de Janeiro
+         *    -> São Paulo
+         */
+
+
+        countries.forEach(function(country) {
+
+            country.cities.forEach(function(city) {
+
+                createRecommendationCard(
+                    city.name,
+                    city.imageUrl,
+                    city.description
+                );
+
+            });
+
+        });
+
+    }
+
+
+    // ==========================================
+    // CREATE RECOMMENDATION CARD
+    // ==========================================
+
+    function createRecommendationCard(
+        name,
+        imageUrl,
+        description
+    ) {
+
+        // Create card
+        const card =
+            document.createElement("div");
+
+        card.className = "card";
+
+
+        // Create image
+        const image =
+            document.createElement("img");
+
+        image.src = imageUrl;
+
+        image.alt = name;
+
+
+        // If image doesn't exist
+        image.onerror = function() {
+
+            this.style.display = "none";
+
+        };
+
+
+        // Create content
+        const content =
+            document.createElement("div");
+
+        content.className =
+            "card-content";
+
+
+        // Create title
+        const title =
+            document.createElement("h3");
+
+        title.textContent =
+            name;
+
+
+        // Create description
+        const text =
+            document.createElement("p");
+
+        text.textContent =
+            description;
+
+
+        // Put everything together
+        content.appendChild(title);
+
+        content.appendChild(text);
+
+        card.appendChild(image);
+
+        card.appendChild(content);
+
+        results.appendChild(card);
+
+    }
+
+
+    // ==========================================
+    // TASK 9 - RESET
+    // ==========================================
+
+    resetButton.addEventListener("click", function() {
+
+        // Clear search input
+        searchInput.value = "";
+
+
+        // Clear recommendations
+        results.innerHTML = "";
+
+
+        // Restore initial message
+        resultMessage.innerHTML =
+            'Search for <strong>beach</strong>, ' +
+            '<strong>temple</strong> or ' +
+            '<strong>country</strong>.';
+
+    });
+
+
+    // ==========================================
+    // CONTACT FORM
+    // ==========================================
+
+    const contactForm =
+        document.getElementById("contactForm");
+
+
+    if (contactForm) {
+
+        contactForm.addEventListener(
+            "submit",
+            function(event) {
+
+                event.preventDefault();
+
+                alert(
+                    "Thank you! Your message has been submitted."
+                );
+
+                contactForm.reset();
+
+            }
+        );
+
+    }
+
+</script>
+```
