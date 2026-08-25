@@ -58,8 +58,8 @@
       },
       {
         "id": 2,
-        "name": "https://www.shutterstock.com/image-photo/agra-indiamarch-182013-beautiful-taj-600w-317537756.jpg",
-        "imageUrl": "enter_your_image_for_taj-mahal.jpg",
+        "name": "Taj Mahal, India",
+        "imageUrl": "https://www.shutterstock.com/image-photo/agra-indiamarch-182013-beautiful-taj-600w-317537756.jpg",
         "description": "An iconic symbol of love and a masterpiece of Mughal architecture."
       }
     ],
