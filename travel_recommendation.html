@@ -1,384 +1,1249 @@
-```html
-<script>
+<!DOCTYPE html>
+<html lang="en">
 
-    let travelData = null;
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Travel Explorer</title>
+
+    <style>
+
+        /* ==============================
+           GENERAL
+        ============================== */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            color: #222;
+            background-color: #f5f5f5;
+        }
 
 
-    // ==========================================
-    // TASK 6 - FETCH JSON
-    // ==========================================
+        /* ==============================
+           NAVBAR
+        ============================== */
 
-    fetch("travel_recommendation_api.json")
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
 
-        .then(function(response) {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
 
-            if (!response.ok) {
-                throw new Error("Could not load JSON file.");
+            padding: 15px 30px;
+
+            background-color: #ffffff;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #008080;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #222;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .nav-links a:hover {
+            color: #008080;
+        }
+
+
+        /* SEARCH */
+
+        .search-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .search-container input {
+            width: 230px;
+            padding: 10px;
+
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 15px;
+
+            border: none;
+            border-radius: 5px;
+
+            background-color: #008080;
+            color: white;
+
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #005f5f;
+        }
+
+        #resetButton {
+            background-color: #555555;
+        }
+
+        #resetButton:hover {
+            background-color: #333333;
+        }
+
+
+        /* ==============================
+           HOME
+        ============================== */
+
+        #home {
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+
+            padding: 100px 8% 50px;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 0, 0, 0.45),
+                    rgba(0, 0, 0, 0.45)
+                ),
+                url("https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=80");
+
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content {
+            max-width: 650px;
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .hero-button {
+            display: inline-block;
+
+            padding: 12px 20px;
+
+            background-color: #008080;
+            color: white;
+
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .hero-button:hover {
+            background-color: #005f5f;
+        }
+
+
+        /* ==============================
+           RECOMMENDATIONS
+        ============================== */
+
+        #recommendations {
+            padding: 80px 7%;
+
+            background-color: #ffffff;
+
+            min-height: 400px;
+        }
+
+        #recommendations h2 {
+            text-align: center;
+
+            color: #008080;
+
+            font-size: 35px;
+
+            margin-bottom: 15px;
+        }
+
+        #resultMessage {
+            text-align: center;
+
+            margin-bottom: 30px;
+
+            color: #555;
+        }
+
+
+        /* IMPORTANT:
+           The assignment asks for display:grid.
+        */
+
+        .results-grid {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 30px;
+
+            max-width: 1100px;
+
+            margin: 0 auto;
+        }
+
+
+        /* RECOMMENDATION CARD */
+
+        .card {
+            background-color: white;
+
+            border-radius: 10px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.15);
+
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+
+            height: 280px;
+
+            object-fit: cover;
+
+            display: block;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            color: #008080;
+
+            font-size: 24px;
+
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            line-height: 1.6;
+
+            color: #444;
+        }
+
+
+        /* ==============================
+           ABOUT US
+        ============================== */
+
+        #about {
+            padding: 90px 8%;
+
+            background-color: #eef8f8;
+
+            text-align: center;
+        }
+
+        #about h2 {
+            color: #008080;
+
+            font-size: 40px;
+
+            margin-bottom: 20px;
+        }
+
+        .about-text {
+            max-width: 850px;
+
+            margin: 0 auto 40px;
+
+            line-height: 1.8;
+
+            font-size: 18px;
+        }
+
+        .team {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 25px;
+
+            max-width: 1000px;
+
+            margin: 0 auto;
+        }
+
+        .team-member {
+            background-color: white;
+
+            padding: 30px;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .team-member .icon {
+            font-size: 50px;
+
+            margin-bottom: 15px;
+        }
+
+        .team-member h3 {
+            margin-bottom: 10px;
+
+            color: #008080;
+        }
+
+
+        /* ==============================
+           CONTACT US
+        ============================== */
+
+        #contact {
+            padding: 90px 20px;
+
+            background-color: white;
+        }
+
+        #contact h2 {
+            text-align: center;
+
+            color: #008080;
+
+            font-size: 40px;
+
+            margin-bottom: 30px;
+        }
+
+        .contact-form {
+            max-width: 650px;
+
+            margin: 0 auto;
+
+            padding: 35px;
+
+            background-color: #f5f5f5;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: bold;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 20px;
+
+            border: 1px solid #cccccc;
+
+            border-radius: 5px;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 15px;
+        }
+
+        .contact-form textarea {
+            resize: vertical;
+        }
+
+
+        /* ==============================
+           FOOTER
+        ============================== */
+
+        footer {
+            padding: 30px;
+
+            text-align: center;
+
+            background-color: #004d4d;
+
+            color: white;
+        }
+
+        .social-links {
+            margin: 15px 0;
+        }
+
+        .social-links a {
+            color: white;
+
+            text-decoration: none;
+
+            margin: 0 10px;
+        }
+
+        .social-links a:hover {
+            text-decoration: underline;
+        }
+
+
+        /* ==============================
+           RESPONSIVE
+        ============================== */
+
+        @media (max-width: 1100px) {
+
+            .navbar {
+                flex-wrap: wrap;
+
+                gap: 15px;
+
+                justify-content: center;
             }
 
-            return response.json();
-
-        })
-
-        .then(function(data) {
-
-            travelData = data;
-
-            console.log("Travel data loaded successfully:");
-            console.log(travelData);
-
-        })
-
-        .catch(function(error) {
-
-            console.error("Error loading JSON:", error);
-
-        });
-
-
-    // ==========================================
-    // GET HTML ELEMENTS
-    // ==========================================
-
-    const searchInput =
-        document.getElementById("searchInput");
-
-    const searchButton =
-        document.getElementById("searchButton");
-
-    const resetButton =
-        document.getElementById("resetButton");
-
-    const results =
-        document.getElementById("results");
-
-    const resultMessage =
-        document.getElementById("resultMessage");
-
-
-    // ==========================================
-    // TASK 7 - SEARCH
-    // ==========================================
-
-    searchButton.addEventListener("click", function() {
-
-        // Convert the user's search to lowercase
-        const keyword =
-            searchInput.value.trim().toLowerCase();
-
-
-        // BEACH / BEACHES
-        if (
-            keyword === "beach" ||
-            keyword === "beaches"
-        ) {
-
-            showBeachRecommendations();
+            .hero-content h1 {
+                font-size: 48px;
+            }
 
         }
 
 
-        // TEMPLE / TEMPLES
-        else if (
-            keyword === "temple" ||
-            keyword === "temples"
-        ) {
+        @media (max-width: 700px) {
 
-            showTempleRecommendations();
+            .navbar {
+                position: relative;
+            }
 
-        }
+            .nav-links {
+                order: 3;
 
+                width: 100%;
 
-        // COUNTRY / COUNTRIES
-        else if (
-            keyword === "country" ||
-            keyword === "countries"
-        ) {
+                justify-content: center;
 
-            showCountryRecommendations();
+                flex-wrap: wrap;
+            }
 
-        }
+            .search-container {
+                width: 100%;
 
+                justify-content: center;
 
-        // Invalid keyword
-        else {
+                flex-wrap: wrap;
+            }
 
-            results.innerHTML = "";
+            .search-container input {
+                width: 100%;
+            }
 
-            resultMessage.textContent =
-                "Please search for beach, temple or country.";
+            #home {
+                min-height: 700px;
+            }
 
-        }
+            .hero-content h1 {
+                font-size: 38px;
+            }
 
-    });
+            .hero-content p {
+                font-size: 17px;
+            }
 
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
 
-    // ==========================================
-    // TASK 8 - BEACHES
-    // ==========================================
-
-    function showBeachRecommendations() {
-
-        if (!travelData) {
-
-            resultMessage.textContent =
-                "Travel data is still loading. Please try again.";
-
-            return;
-
-        }
-
-
-        results.innerHTML = "";
-
-        resultMessage.textContent =
-            "Recommended beaches:";
-
-
-        // Get beaches from JSON
-        const beaches =
-            travelData.beaches;
-
-
-        // Display the two beaches
-        beaches.forEach(function(beach) {
-
-            createRecommendationCard(
-                beach.name,
-                beach.imageUrl,
-                beach.description
-            );
-
-        });
-
-    }
-
-
-    // ==========================================
-    // TASK 8 - TEMPLES
-    // ==========================================
-
-    function showTempleRecommendations() {
-
-        if (!travelData) {
-
-            resultMessage.textContent =
-                "Travel data is still loading. Please try again.";
-
-            return;
+            .team {
+                grid-template-columns: 1fr;
+            }
 
         }
 
+    </style>
 
-        results.innerHTML = "";
-
-        resultMessage.textContent =
-            "Recommended temples:";
+</head>
 
 
-        // Get temples from JSON
-        const temples =
-            travelData.temples;
+<body>
 
 
-        // Display the two temples
-        temples.forEach(function(temple) {
+    <!-- ======================================
+         NAVBAR
+    ======================================= -->
 
-            createRecommendationCard(
-                temple.name,
-                temple.imageUrl,
-                temple.description
-            );
+    <nav class="navbar">
 
-        });
-
-    }
+        <div class="logo">
+            ✈️ Travel Explorer
+        </div>
 
 
-    // ==========================================
-    // TASK 8 - COUNTRIES
-    // ==========================================
+        <div class="nav-links">
 
-    function showCountryRecommendations() {
+            <a href="#home">
+                Home
+            </a>
 
-        if (!travelData) {
+            <a href="#about">
+                About Us
+            </a>
 
-            resultMessage.textContent =
-                "Travel data is still loading. Please try again.";
+            <a href="#contact">
+                Contact Us
+            </a>
 
-            return;
-
-        }
-
-
-        results.innerHTML = "";
-
-        resultMessage.textContent =
-            "Recommended countries:";
+        </div>
 
 
-        // Get countries from JSON
-        const countries =
-            travelData.countries;
+        <div class="search-container">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search beach, temple or country"
+            >
+
+            <button id="searchButton">
+                Search
+            </button>
+
+            <button id="resetButton">
+                Reset
+            </button>
+
+        </div>
+
+    </nav>
 
 
-        /*
-         * Each country contains cities.
-         *
-         * Example:
-         *
-         * Australia
-         *    -> Sydney
-         *    -> Melbourne
-         *
-         * Japan
-         *    -> Tokyo
-         *    -> Kyoto
-         *
-         * Brazil
-         *    -> Rio de Janeiro
-         *    -> São Paulo
-         */
+    <!-- ======================================
+         HOME PAGE
+    ======================================= -->
+
+    <section id="home">
+
+        <div class="hero-content">
+
+            <h1>
+                EXPLORE THE WORLD
+            </h1>
+
+            <p>
+                Discover amazing destinations around the world.
+                Explore beautiful beaches, fascinating temples,
+                vibrant cities and unforgettable countries.
+                Find your next adventure with Travel Explorer.
+            </p>
+
+            <a
+                href="#recommendations"
+                class="hero-button"
+            >
+                Discover Destinations
+            </a>
+
+        </div>
+
+    </section>
 
 
-        countries.forEach(function(country) {
+    <!-- ======================================
+         RECOMMENDATION RESULTS
+    ======================================= -->
 
-            country.cities.forEach(function(city) {
+    <section id="recommendations">
 
-                createRecommendationCard(
-                    city.name,
-                    city.imageUrl,
-                    city.description
+        <h2>
+            Travel Recommendations
+        </h2>
+
+        <p id="resultMessage">
+            Search for
+            <strong>beach</strong>,
+            <strong>temple</strong>
+            or
+            <strong>country</strong>.
+        </p>
+
+
+        <div
+            id="results"
+            class="results-grid"
+        ></div>
+
+    </section>
+
+
+    <!-- ======================================
+         ABOUT US
+    ======================================= -->
+
+    <section id="about">
+
+        <h2>
+            About Us
+        </h2>
+
+        <p class="about-text">
+
+            Travel Explorer is a travel recommendation
+            website created to help travelers discover
+            beautiful destinations around the world.
+
+            Whether you are looking for a relaxing beach,
+            a fascinating temple or an exciting country
+            to explore, our goal is to help you find
+            your next unforgettable adventure.
+
+        </p>
+
+
+        <h2 style="font-size: 30px;">
+            Meet Our Team
+        </h2>
+
+
+        <div class="team">
+
+
+            <div class="team-member">
+
+                <div class="icon">
+                    👩‍💼
+                </div>
+
+                <h3>
+                    Sarah Johnson
+                </h3>
+
+                <p>
+                    Founder & CEO
+                </p>
+
+            </div>
+
+
+            <div class="team-member">
+
+                <div class="icon">
+                    👨‍💻
+                </div>
+
+                <h3>
+                    Michael Brown
+                </h3>
+
+                <p>
+                    Travel Specialist
+                </p>
+
+            </div>
+
+
+            <div class="team-member">
+
+                <div class="icon">
+                    👩‍🎨
+                </div>
+
+                <h3>
+                    Emily Davis
+                </h3>
+
+                <p>
+                    Creative Director
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================
+         CONTACT US
+    ======================================= -->
+
+    <section id="contact">
+
+        <h2>
+            Contact Us
+        </h2>
+
+
+        <form
+            id="contactForm"
+            class="contact-form"
+        >
+
+
+            <label for="name">
+                Name
+            </label>
+
+            <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Enter your name"
+                required
+            >
+
+
+            <label for="email">
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <label for="message">
+                Message
+            </label>
+
+            <textarea
+                id="message"
+                name="message"
+                rows="7"
+                placeholder="Write your message..."
+                required
+            ></textarea>
+
+
+            <button type="submit">
+                Submit
+            </button>
+
+
+        </form>
+
+    </section>
+
+
+    <!-- ======================================
+         FOOTER
+    ======================================= -->
+
+    <footer>
+
+        <p>
+            Follow us
+        </p>
+
+        <div class="social-links">
+
+            <a href="#">
+                Facebook
+            </a>
+
+            <a href="#">
+                Instagram
+            </a>
+
+            <a href="#">
+                Twitter
+            </a>
+
+        </div>
+
+        <p>
+            © 2026 Travel Explorer
+        </p>
+
+    </footer>
+
+
+    <!-- ======================================
+         JAVASCRIPT
+    ======================================= -->
+
+    <script>
+
+        // ======================================
+        // VARIABLES
+        // ======================================
+
+        let travelData = null;
+
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+        const searchButton =
+            document.getElementById("searchButton");
+
+        const resetButton =
+            document.getElementById("resetButton");
+
+        const results =
+            document.getElementById("results");
+
+        const resultMessage =
+            document.getElementById("resultMessage");
+
+
+        // ======================================
+        // TASK 6
+        // FETCH JSON DATA
+        // ======================================
+
+        fetch("travel_recommendation_api.json")
+
+            .then(function(response) {
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load travel_recommendation_api.json"
+                    );
+
+                }
+
+                return response.json();
+
+            })
+
+            .then(function(data) {
+
+                travelData = data;
+
+                // Required by the assignment:
+                // check the JSON in the console
+
+                console.log(
+                    "Travel recommendation data:",
+                    travelData
+                );
+
+            })
+
+            .catch(function(error) {
+
+                console.error(
+                    "Error loading JSON:",
+                    error
                 );
 
             });
 
-        });
 
-    }
+        // ======================================
+        // TASK 7
+        // SEARCH BUTTON
+        // ======================================
 
+        searchButton.addEventListener(
+            "click",
+            function() {
 
-    // ==========================================
-    // CREATE RECOMMENDATION CARD
-    // ==========================================
+                // Remove spaces and convert to lowercase
 
-    function createRecommendationCard(
-        name,
-        imageUrl,
-        description
-    ) {
-
-        // Create card
-        const card =
-            document.createElement("div");
-
-        card.className = "card";
+                const keyword =
+                    searchInput.value
+                        .trim()
+                        .toLowerCase();
 
 
-        // Create image
-        const image =
-            document.createElement("img");
+                // BEACH / BEACHES
 
-        image.src = imageUrl;
+                if (
+                    keyword === "beach" ||
+                    keyword === "beaches"
+                ) {
 
-        image.alt = name;
+                    showBeaches();
 
-
-        // If image doesn't exist
-        image.onerror = function() {
-
-            this.style.display = "none";
-
-        };
+                }
 
 
-        // Create content
-        const content =
-            document.createElement("div");
+                // TEMPLE / TEMPLES
 
-        content.className =
-            "card-content";
+                else if (
+                    keyword === "temple" ||
+                    keyword === "temples"
+                ) {
 
+                    showTemples();
 
-        // Create title
-        const title =
-            document.createElement("h3");
-
-        title.textContent =
-            name;
+                }
 
 
-        // Create description
-        const text =
-            document.createElement("p");
+                // COUNTRY / COUNTRIES
 
-        text.textContent =
-            description;
+                else if (
+                    keyword === "country" ||
+                    keyword === "countries"
+                ) {
 
+                    showCountries();
 
-        // Put everything together
-        content.appendChild(title);
-
-        content.appendChild(text);
-
-        card.appendChild(image);
-
-        card.appendChild(content);
-
-        results.appendChild(card);
-
-    }
+                }
 
 
-    // ==========================================
-    // TASK 9 - RESET
-    // ==========================================
+                // INVALID KEYWORD
 
-    resetButton.addEventListener("click", function() {
+                else {
 
-        // Clear search input
-        searchInput.value = "";
+                    results.innerHTML = "";
 
+                    resultMessage.textContent =
+                        "Please enter beach, beaches, temple, temples, country or countries.";
 
-        // Clear recommendations
-        results.innerHTML = "";
-
-
-        // Restore initial message
-        resultMessage.innerHTML =
-            'Search for <strong>beach</strong>, ' +
-            '<strong>temple</strong> or ' +
-            '<strong>country</strong>.';
-
-    });
-
-
-    // ==========================================
-    // CONTACT FORM
-    // ==========================================
-
-    const contactForm =
-        document.getElementById("contactForm");
-
-
-    if (contactForm) {
-
-        contactForm.addEventListener(
-            "submit",
-            function(event) {
-
-                event.preventDefault();
-
-                alert(
-                    "Thank you! Your message has been submitted."
-                );
-
-                contactForm.reset();
+                }
 
             }
         );
 
-    }
 
-</script>
-```
+        // ======================================
+        // TASK 8
+        // BEACH RECOMMENDATIONS
+        // ======================================
+
+        function showBeaches() {
+
+
+            if (!travelData) {
+
+                resultMessage.textContent =
+                    "Travel data is still loading. Please try again.";
+
+                return;
+
+            }
+
+
+            results.innerHTML = "";
+
+
+            resultMessage.textContent =
+                "Recommended Beaches";
+
+
+            // Get beaches from JSON
+
+            const beaches =
+                travelData.beaches;
+
+
+            // Display each beach
+
+            beaches.forEach(function(beach) {
+
+                createCard(
+                    beach.name,
+                    beach.imageUrl,
+                    beach.description
+                );
+
+            });
+
+        }
+
+
+        // ======================================
+        // TASK 8
+        // TEMPLE RECOMMENDATIONS
+        // ======================================
+
+        function showTemples() {
+
+
+            if (!travelData) {
+
+                resultMessage.textContent =
+                    "Travel data is still loading. Please try again.";
+
+                return;
+
+            }
+
+
+            results.innerHTML = "";
+
+
+            resultMessage.textContent =
+                "Recommended Temples";
+
+
+            // Get temples from JSON
+
+            const temples =
+                travelData.temples;
+
+
+            // Display each temple
+
+            temples.forEach(function(temple) {
+
+                createCard(
+                    temple.name,
+                    temple.imageUrl,
+                    temple.description
+                );
+
+            });
+
+        }
+
+
+        // ======================================
+        // TASK 8
+        // COUNTRY RECOMMENDATIONS
+        // ======================================
+
+        function showCountries() {
+
+
+            if (!travelData) {
+
+                resultMessage.textContent =
+                    "Travel data is still loading. Please try again.";
+
+                return;
+
+            }
+
+
+            results.innerHTML = "";
+
+
+            resultMessage.textContent =
+                "Recommended Countries";
+
+
+            /*
+             * In your JSON, countries contain cities.
+             *
+             * Australia
+             *    - Sydney
+             *    - Melbourne
+             *
+             * Japan
+             *    - Tokyo
+             *    - Kyoto
+             *
+             * Brazil
+             *    - Rio de Janeiro
+             *    - São Paulo
+             *
+             * We display the cities as travel recommendations.
+             */
+
+
+            travelData.countries.forEach(
+                function(country) {
+
+
+                    country.cities.forEach(
+                        function(city) {
+
+
+                            createCard(
+                                city.name,
+                                city.imageUrl,
+                                city.description
+                            );
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+        }
+
+
+        // ======================================
+        // CREATE RECOMMENDATION CARD
+        // ======================================
+
+        function createCard(
+            name,
+            imageUrl,
+            description
+        ) {
+
+
+            // Create card
+
+            const card =
+                document.createElement("div");
+
+            card.className = "card";
+
+
+            // Create image
+
+            const image =
+                document.createElement("img");
+
+            image.src = imageUrl;
+
+            image.alt = name;
+
+
+            // Create content
+
+            const content =
+                document.createElement("div");
+
+            content.className =
+                "card-content";
+
+
+            // Create title
+
+            const title =
+                document.createElement("h3");
+
+            title.textContent =
+                name;
+
+
+            // Create description
+
+            const text =
+                document.createElement("p");
+
+            text.textContent =
+                description;
+
+
+            // Assemble card
+
+            content.appendChild(title);
+
+            content.appendChild(text);
+
+            card.appendChild(image);
+
+            card.appendChild(content);
+
+            results.appendChild(card);
+
+        }
+
+
+        // ======================================
+        // TASK 9
+        // RESET BUTTON
+        // ======================================
+
+        resetButton.addEventListener(
+            "click",
+            function() {
+
+
+                // Clear search field
+
+                searchInput.value = "";
+
+
+                // Clear results
+
+                results.innerHTML = "";
+
+
+                // Restore initial message
+
+                resultMessage.innerHTML =
+                    'Search for <strong>beach</strong>, ' +
+                    '<strong>temple</strong> or ' +
+                    '<strong>country</strong>.';
+
+
+            }
+        );
+
+
+        // ======================================
+        // CONTACT FORM
+        // ======================================
+
+        document
+            .getElementById("contactForm")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+
+                    // Prevent page refresh
+
+                    event.preventDefault();
+
+
+                    alert(
+                        "Thank you! Your message has been submitted."
+                    );
+
+
+                    // Clear form
+
+                    this.reset();
+
+                }
+            );
+
+
+    </script>
+
+</body>
+
+</html>
