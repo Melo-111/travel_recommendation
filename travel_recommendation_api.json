@@ -6,12 +6,12 @@
         "cities": [
           {
             "name": "Sydney, Australia",
-            "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0JrYlT7GeyvwSM33PygXG2fZloXuPjbYJyFvut5Nmeg&s=10",
+            "imageUrl": "https://www.shutterstock.com/image-photo/january-5-2019-sydney-opera-600w-2441858287.jpg",
             "description": "A vibrant city known for its iconic landmarks like the Sydney Opera House and Sydney Harbour Bridge."
           },
           {
             "name": "Melbourne, Australia",
-            "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQpMVdbszuY9Z1PtkJZGI2DyOaBf1CCRx53fFBNFh0CsaUT8PVUEfkNGwk&s=10",
+            "imageUrl": "https://www.shutterstock.com/image-photo/skyline-melbourne-city-business-district-600w-2506983845.jpg",
             "description": "A cultural hub famous for its art, food, and diverse neighborhoods."
           }
         ]
@@ -22,12 +22,12 @@
         "cities": [
           {
             "name": "Tokyo, Japan",
-            "imageUrl": "enter_your_image_for_tokyo.jpg",
+            "imageUrl": "https://www.shutterstock.com/image-photo/aerial-view-tokyo-cityscape-fuji-600w-2628563209.jpg",
             "description": "A bustling metropolis blending tradition and modernity, famous for its cherry blossoms and rich culture."
           },
           {
             "name": "Kyoto, Japan",
-            "imageUrl": "enter_your_image_for_kyoto.jpg",
+            "imageUrl": "https://www.shutterstock.com/image-photo/kyoto-japan-cityscape-tower-golden-600w-2279318699.jpg",
             "description": "Known for its historic temples, gardens, and traditional tea houses."
           }
         ]
@@ -38,12 +38,12 @@
         "cities": [
           {
             "name": "Rio de Janeiro, Brazil",
-            "imageUrl": "enter_your_image_for_rio.jpg",
+            "imageUrl": "https://www.shutterstock.com/image-photo/rio-de-janeiro-brazil-march-600w-2279698565.jpg",
             "description": "A lively city known for its stunning beaches, vibrant carnival celebrations, and iconic landmarks."
           },
           {
             "name": "São Paulo, Brazil",
-            "imageUrl": "enter_your_image_for_sao-paulo.jpg",
+            "imageUrl": "https://www.shutterstock.com/image-photo/cable-bridge-downtown-sao-paulo-600w-2363572377.jpg",
             "description": "The financial hub with diverse culture, arts, and a vibrant nightlife."
           }
         ]
@@ -53,12 +53,12 @@
       {
         "id": 1,
         "name": "Angkor Wat, Cambodia",
-        "imageUrl": "enter_your_image_for_angkor-wat.jpg",
+        "imageUrl": "https://www.shutterstock.com/image-photo/angkor-wat-temple-siem-reap-600w-2252929839.jpg",
         "description": "A UNESCO World Heritage site and the largest religious monument in the world."
       },
       {
         "id": 2,
-        "name": "Taj Mahal, India",
+        "name": "https://www.shutterstock.com/image-photo/agra-indiamarch-182013-beautiful-taj-600w-317537756.jpg",
         "imageUrl": "enter_your_image_for_taj-mahal.jpg",
         "description": "An iconic symbol of love and a masterpiece of Mughal architecture."
       }
@@ -67,13 +67,13 @@
       {
         "id": 1,
         "name": "Bora Bora, French Polynesia",
-        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_J3dOvFX-vJEklQt8KnepJqm6hOBnUET-9-J3sp_6jQ&s=10",
+        "imageUrl": "https://www.shutterstock.com/image-photo/beautiful-beach-bora-lush-palm-600w-2588688433.jpg",
         "description": "An island known for its stunning turquoise waters and luxurious overwater bungalows."
       },
       {
         "id": 2,
         "name": "Copacabana Beach, Brazil",
-        "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQymiKE7B6STLx8hHfSEzndjqnYNhajVa7wiaAPaDmKw&s=10",
+        "imageUrl": "https://www.shutterstock.com/image-photo/long-exposure-photo-copacabana-beach-600w-2404717673.jpg",
         "description": "A famous beach in Rio de Janeiro, Brazil, with a vibrant atmosphere and scenic views."
       }
     ]
